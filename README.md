@@ -4,13 +4,13 @@
 
 ## Motherboard
 
-The computer parts discussed so far — CPU, RAM dies, the BIOS die — are physically located on the motherboard. It is, as the name suggests, the place for attaching the most important components. Besides just hosting them, it enables them to communicate with each other.
+The computer parts discussed so far — CPU, RAM dies, the BIOS die — are physically located on the **motherboard**. It is, as the name suggests, the place for attaching the most important components. Besides just hosting them, it enables them to communicate with each other.
 
-On a modern motherboard, we will find e.g, those elements:
-* a CPU slot (or socket) — a place to put a CPU in (though it also happens that the CPU is soldered directly to the
-motherboard);
+On the modern motherboard, we can find the following elements:  
 
-* RAM slots: typically DDR3, DDR4, DDR5 (here, it may also happen that memory is soldered directly to the motherboard1);
+* a CPU slot (or _socket_) — a place to put a CPU in (though it also happens that the CPU is soldered directly to the motherboard);
+
+* RAM slots: typically DDR3, DDR4, DDR5 (here, it may also happen that memory is soldered directly to the motherboard<sup>1</sup>);
 
 * the chipset (which will be discussed below);
 
@@ -18,7 +18,7 @@ motherboard);
 
 * the system clock generator, allowing synchronization between various components;
 
-* power sockets, through which all the computer components arempowered with electricity;
+* power sockets, through which all the computer components are powered with electricity;
 
 * hard drive slots;
 
@@ -26,9 +26,7 @@ motherboard);
 
 * keyboard slots;
   
-* extension card slots
-
-(it is through them that we can connect a graphics card or a network card, or a USB port controller).
+* extension card slots (it is through them that we can connect a graphics card or a network card, or a USB port controller).
 
 In practice, a motherboard can look as follows:
 
@@ -37,7 +35,7 @@ Figure 1. A Dell Precision T3600 motherboard (from year 2012).
 
 1 This happens e.g. for the LPDDR memory, which is used mainly in mobile devices (phones, tablets), though also in certain laptops. This memory kind is slower and more expensive than typical DDR but in reward it requires lower voltage, which allows longer operation on battery power.
 
-Such organization of the board with standardized sockets/slots allows for some elasticity in choosing the components to be placed inside or attached to the computer. Unfortunately, even if a component can be attached physically, it/s still not guaranteed that it will be supported correctly by the motherboard and the processor. Hence, it/s essential to verify compatibility specifications on every hardware upgrade.
+Such organization of the board with standardized sockets/slots allows for some elasticity in choosing the components to be placed inside or attached to the computer. Unfortunately, even if a component can be attached physically, it's still not guaranteed that it will be supported correctly by the motherboard and the processor. Hence, it's essential to verify compatibility specifications on every hardware upgrade.
 
 ## Chipset
 
