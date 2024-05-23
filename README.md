@@ -37,7 +37,7 @@ Such organization of the board with standardized sockets/slots allows for some e
 
 ## Chipset
 
-A **chipset** is literally “a set of (co-operating) integrated circuits". In the case of the motherboard chipset, we can distinguish (or rather “used to distinguish", though the recent changes will be discussed later) two such circuits, called the **northbridge** and the **southbridge**. These are the chips implementing the connection between the processor and the I/O devices. A scheme of the two-bridge architecture looks as follows:
+A **chipset** is literally “a set of (co-operating) integrated circuits". In the case of the motherboard chipset, we can distinguish (or rather “used to distinguish", though the recent changes will be discussed later) two such circuits, called the **northbridge** and the **southbridge**. These are the chips implementing the connection between the processor and the I/O devices. The basic layout of this two-bridge system is shown below:
 
 
 Figure 2\. A motherboard chipset with the two-bridge architecture.
@@ -52,17 +52,15 @@ In the most modern solutions, the tasks served so far by the northbridge have be
 
 Figure 3\. A motherboard chipset with the one-bridge architecture.
 
-Even in such a basic description, we can see that various computer components can fall into different categories:
+Even in basic descriptions, we can see that computer components can be:
 
-•	a separate integrated circuit,
+* separate integrated circuits,
+* integrated into the motherboard,
+* integrated into the processor.
 
-•	integrated with the motherboard,
+From a user’s perspective, these differences are not noticeable unless a part needs replacement. Higher integration can lead to more expensive repairs and harder hardware replacement if components fail. However, it usually results in better efficiency. 
 
-•	integrated with the processor.
-
-This choice is not visible from the user viewpoint, as long as there is no need of replacing some parts. This means that a higher level of integration leads to a risk of more expensive servicing once some components broke, or of hardware replacement becoming more difficult. On the other hand, the advantage of a higher level of integration can be better efficiency.
-
-Altogether, this means that also in the future we can expect more changes of computer architecture in terms of moving various components between the above categories (just as it happened to the northbridge, and somewhat earlier — at least roughly — to the RAM controller).
+Therefore, we can expect future shifts in computer architecture, with various components being integrated differently (just like the northbridge and, earlier, the RAM controller).
 
 ## Buses
 
