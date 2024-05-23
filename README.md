@@ -52,7 +52,7 @@ In the most modern solutions, the tasks served so far by the northbridge have be
 
 Figure 3\. A motherboard chipset with the one-bridge architecture.
 
-Even in basic descriptions, we can see that computer components can be:
+Even in the basic descriptions above, we can see that computer components can be:
 
 * separate integrated circuits,
 * integrated into the motherboard,
