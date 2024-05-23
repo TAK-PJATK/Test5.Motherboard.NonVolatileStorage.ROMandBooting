@@ -68,12 +68,9 @@ Buses play a key role on the above diagrams: they transmit signals between I/O d
 
 Currently, the standard for high-speed data busses is PCI Express. It allows transmission in both directions at once (full duplex). Transmission takes place on multiple lines, which allows sending simultaneously multiple bits in one direction. The newest version offer in total a bandwidth of tens of gigabytes per second. However, not every input/output device needs so high bandwidth; therefore the southbridge is also connected to buses in many other standards. We will touch the topic of buses again when discussing the input/output system.
 
-*   [Non-volatile storage](main-1.xhtml)
-*   [ROM and booting](main-2.xhtml)
-
 # Non-volatile storage
 
-So far, we’ve taken a closer look at the primary memory. Now, it’s time to discuss the most important kind of non-volatile memory, which is mass storage (including: hard drives, SSD drives, but also external memory carriers such as CD/DVD discs or USB memory). Although theoretically a computer can operate without any memory of such type (e.g, in the mode “receive the program to be executed from the network and print the output on a printer”), this is very rare in practice, A typical (personal or office) computer is usually equipped with a built-in mass storage, popularly called a drive (or a disk), which should be regarded as one of the basic computer components.
+So far, we've focused on primary memory. Now, let's discuss the most important type of non-volatile memory: mass storage (including hard drives, SSDs, and external memory devices like CDs/DVDs or USB drives). While theoretically a computer can function without this type of memory (operating in a mode where it receives programs from the network and prints output directly), this is very uncommon in practice. Typically, personal or office computers come with built-in mass storage, commonly referred to as a drive or disk, which is considered one of the fundamental components of a computer.
 
 ## Storage drives
 
