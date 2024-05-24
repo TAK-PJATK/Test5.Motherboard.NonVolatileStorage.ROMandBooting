@@ -152,27 +152,75 @@ Currently, in home applications, three main types of buses are used to connect s
 - **PCIe (PCI Express, where PCI stands for Peripheral Component Interconnect):** A standard we have already encountered in the lecture "Motherboard" (due to its role in connecting the CPU to the RAM memory); also used for faster SSD models.
 - **USB (Universal Serial Bus):** Mainly used for attaching external drives.
 
+The SATA bus is derived from an older ATA model, designed specifically for communication with hard drives. For example, its cooperation with the drive controller enables the so-called native command queuing, which allows altering the order of executed read and write commands to minimize their total execution time. (Recall that this time depends on the physical placement of data on the disk, so it's beneficial to rearrange the commands so that those involving neighboring sectors are executed next to each other.) This makes SATA a proper choice for HDD drives; in turn, it is beneficial for SSD manufacturers to support that standard as well, as it allows end users to replace an older HDD with a newer SSD in a typical computer.
+
+On the other hand, limitations in transmission speed for the SATA standard (3 Gb/s in SATA 2 and 6 Gb/s in SATA 3) make it too slow for the fastest currently available SSD drives. Therefore, fully utilizing such devices requires connecting them to a faster PCIe bus (where the analogous limit in the fastest version is nearly 1 Tb/s as of 2022, and doubles every few years).
+
+USB stands out from the other two standards in that it was designed from the start for external devices (hence we will find USB ports on the outside of a computer case).
+
+It's also worth mentioning that all three standards involve not only data transmission but also supplying the connected devices with an appropriate amount of electric power.
+
 #### Communication Modes
 
-Modern buses use serial transmission for higher frequency rates, even though they consist of multiple wires. SATA, PCIe, and USB all employ serial communication but differ in architecture and efficiency.
+All the above bus types are described as serial, which essentially means that transmission happens sequentially, bit by bit. It might seem that a relatively easy and effective idea for increasing the transmission rate could be switching to a parallel approach, where multiple bits would be sent at once (or more precisely: in each bus cycle, 1 bit would be sent along every wire). However, since around 2000, we've observed a transition from older parallel solutions (PCI, ATA) to serial ones (USB, SATA, PCIe). This shift occurred because mutual interference between the wires and slight differences in transmission times along them complicated synchronization on the receiving side, limiting the frequency of cycles in parallel buses. By migrating to serial transmission, we achieved significantly higher frequencies.
+
+On the other hand, despite the term "serial," modern buses also consist of several wires. In the SATA standard, which is simplest in this regard, we have 7 wires, out of which 3 transmit no data (serving just as isolation layers for the others), and the remaining 4 wires are split into 2 pairs, each responsible for transmission in one direction. In each pair, one of the wires is a strict "negation" of the other, always transmitting the opposite bit values. In exchange for this "waste" of bandwidth, we gain clearer signal interpretation on the receiving side, a chance to detect errors in communication, and a constant level of the electric charge on both sides of the bus.
+
+The PCIe buses, as already mentioned in the lecture "Motherboard," go much further by introducing multiple lanes, each of which allows transmitting 1 bit in each direction. In practice, each such lane consists of 4 wires, organized into two negation pairs, similar to SATA. In version 6.0, using 16 such lanes of transmission rate 60 Gb/s each allows achieving nearly 1 Tb/s in total. A similar solution—introducing 2 lanes of communication—has also been introduced in the newest versions of USB.
+
+If so, one might ask: why is PCIe still called serial? The reason, at least partially, is that each PCIe lane operates as an independent serial connection, with its own timing for receiving subsequent bits, without the synchronization known from parallel buses. Instead, if needed, PCIe controllers perform buffering of data incoming via various lanes and join them into complete data afterward. This means that, to ensure no exhaustion of those buffers, the protocol must still involve some rough synchronization between the lanes by means of dedicated control messages. However, this technique has a much smaller impact on the overall transmission rate.
+
+### Transmission Tax
+
+Thanks to adopting the serial approach, modern buses do not require providing a separate clock signal: the timing of arriving bits is essentially known upfront, and potential divergences can be detected by just observing the data stream. However, this solution could cause trouble in the case of a long series of bits of the same value (e.g., if 1,000 "1"s were received in a row, there would be uncertainty if, by some chance, there were one more or one less). To address that, all buses discussed here employ a type of encoding that guarantees periodic changes in the stream content.
+
+The oldest variant of such encoding, used in SATA and older versions of PCIe and USB, is the 8b/10b encoding. It transforms sequences of 8 bits into 10-bit representations in such a way that the resulting stream of bits never contains more than 5 identical values in a row. The price to be paid, however, is "wasting" as much as 20% of the total throughput. For example, in the case of SATA, the typically described maximum rate of 6 Gb/s does not take this effect into account; therefore, the actual maximum throughput for meaningful data is smaller by 20%.
+
+An additional benefit of the 8b/10b encoding is that it acts as a checksum, allowing the detection of cases where a single bit has been corrupted.
+
+In newer PCIe and USB buses, updated versions of this encoding with a lower transmission tax are utilized, such as 128b/130b encoding, which uses just 2 additional bits for every 130 bits. This method, however, requires better control of timing on the controller side. In the PCIe 6.0 standard, yet another encoding method is used: 242B/256B. This method again comes with a higher tax, but in exchange, it includes an error correction code—a more advanced system of checksums that allows not only the detection of corrupted bits but also the correction of such errors.
 
 #### Compatibility
 
-Newer versions of bus standards provide backward compatibility, allowing older devices to connect with updated ports while defaulting to slower transmission rates. Connectors like USB-A, micro-USB, and USB-C have evolved to accommodate higher throughput.
+All the aforementioned types of buses have evolved over the years, introducing new versions with ever-increasing transmission rates. For example, we have seen an increase from 1.5 to 6 Gb/s between SATA 1 and SATA 3, from 2 to 970 Gb/s between PCIe 1.0x1 and PCIe 6.0x16, and from 0.0015 to 20 Gb/s between USB 1.0 and USB 3.2. The multitude of changes could lead to a nightmare for end users if the standards did not apply backward compatibility between consecutive versions.
+
+For instance, a USB 2.0 device can be attached to a USB 3.0 port; conversely, a USB 3.0 device can be plugged into a USB 2.0 port. In both cases, the protocol will agree on the older of the two versions (in these examples, USB 2.0), resulting in communication with correspondingly lower efficiency. Importantly, the connection will still work. Analogous compatibility is generally observed between PCIe versions, as well as between SATA versions. There are some exceptions, such as SATA 2 and SATA 3 not being fully compatible with SATA 1, though the latter is now rarely used.
+
+Simultaneously, the corresponding standards for connectors have also evolved, generally decreasing in size and introducing necessary adjustments for cooperating with newer bus standards. For example, the broadly known USB-A ports were soon accompanied by micro USB (or more precisely, USB micro-B) plugs, which, due to their smaller size, became widespread in mobile devices. Later, USB-C was introduced, featuring a symmetrical and more convenient plug shape, along with additional pins that allow larger throughput for both data and power.
+
+![Figure 4. Evolution of connectors for the USB buses.](http://en.wikipedia.org)
+
+Lastly, it is worth mentioning that the evolution of connectors has also increased compatibility between different bus standards. Initially, SATA and PCIe were simply terminated with SATA and PCIe ports, differing in both shape and size. Since 2013, however, the M.2 standard has specified the shape of the port (and the corresponding connector in a storage drive) together with a controller allowing communication according to any of the SATA, PCIe, or USB protocols, depending on the requirements of the connected device and potential limitations of the computer motherboard. However, while M.2 can fully support the SATA 3 protocol (allowing its top throughput of 6 Gb/s), it can handle only up to 4 transmission lanes in the case of PCIe. For a bus of x16 type, this means only 25% of the maximum bus throughput is achievable. Therefore, while M.2 drives can surpass the SATA barrier of efficiency from the end user's viewpoint, they still lag behind drives with the full PCIe interface.
 
 ### Logical Organization of Data
 
-Data on a storage drive is organized through file systems, managed by the operating system. Examples include NTFS for Windows and ext4 for Linux. File fragmentation can affect efficiency, and techniques like defragmentation are used to manage this.
+From a physical viewpoint, the memory cells form just a sequence of bits (0 and 1 values). However, in the case of storage drives, we want to store and then correctly interpret not just the data itself, but also the structure of files and folders containing them, the metadata of these objects, and additional data structures of the operating system. This necessitates an appropriate format for storing information on the drive.
+
+### File Systems
+
+Organizing data on a storage drive (e.g., choosing the location for saving new data or encoding the relationships between files and folders) is the responsibility of the operating system, which follows a specific set of rules called a file system.
+
+For example, for HDD drives, the Windows and Linux systems employ by default the NTFS and ext4 file systems, respectively. Until a few years ago, this meant that an HDD formatted (with default settings) and modified under Linux was non-readable under Windows. Fortunately, the newest versions of Windows have introduced support for ext4, while Linux has long supported NTFS, at least in read-only mode.
+
+A disadvantage of NTFS is the relatively high fragmentation of data. This means that logically related data (e.g., from a single file) can be placed in distant locations on the disk. As we have mentioned, this is suboptimal as it increases the total time spent accessing a file. To address this problem, Windows offers a procedure called defragmenting (also called optimizing or defragging), which restores some order to the stored data. In older versions of Windows, this procedure could only be triggered manually because of how engaging it was for overall PC efficiency. Newer versions introduced an option for automatic defragmenting, although the process can still be cumbersome.
+
+For SSD drives, one can either use one of the leading file systems mentioned above or choose among new file systems dedicated to SSD drives. Examples include exFAT in Windows or F2FS in Linux.
 
 #### Partitions
 
-Partitions divide a drive's storage space into independent units, each potentially using different file systems. They can host operating systems and metadata such as the Master File Table (MFT) in NTFS.
+Partitions are explicit sections of the drive storage space that, from the viewpoint of the operating system and all running programs, act as fully independent storage units, just as if they were physically separate drives. For example, when on Windows we see several "drives" (C:, D:, E:, etc.), these may be subsequent partitions of a single physical drive, just acting as different logical drives. Each partition can be accessed with a different file system.
+
+If a partition hosts an operating system, its initial sectors are reserved for the boot loader (as described in the lecture "Motherboard"). Similarly, if the partition is formatted with the NTFS file system, then NTFS reserves its initial part for a file called the Master File Table (MFT), which contains metadata for every file (e.g., name, location on the drive, size, modification date, and attributes such as "read-only" or "hidden"). The MFT also contains a bitmap indicating free and occupied clusters on the drive. To avoid fragmentation of the MFT file, the file system reserves a larger area upfront (called the MFT zone) to avoid placing other files there. Additionally, to recover from corruption of the MFT content, the file system keeps a copy (called the MFT mirror) on the drive.
 
 #### Encryption
 
-File systems may offer encryption to protect stored data from unauthorized access. Hardware-level encryption using TPM (Trusted Platform Module) provides faster and more secure encryption compared to software solutions.
+File systems also offer an option for encryption, meaning the drive stores an encrypted version of the actual information. This ensures that an unauthorized person cannot view the file contents on the drive, even if they gain possession of the computer, unmount the drive, and plug it in elsewhere, or use an alternative operating system.
 
-By understanding these various aspects of non-volatile memory, we can appreciate the complexities and innovations that have made modern mass storage efficient and reliable.
+A disadvantage of encryption is a potential slowdown of computer operations. Additionally, encryption does not guarantee "full safety." For example, even if the file contents are encrypted, the structure and names of files and folders typically are not.
+
+It is also possible to encrypt a drive at the hardware level using methods like the Trusted Platform Module (TPM), which started appearing in computers in the last decade. Each instance of TPM contains unique encryption and decryption keys, designed to prevent retrieval of these keys from the device, and prevent removing the TPM from the motherboard without destroying the hardware. Encrypting the whole drive with TPM can be done from the BIOS / UEFI level. In this case, the booting process involves decrypting the boot loader, requiring the user to provide a password and initiate storage decryption even before the main operating system starts up. To facilitate this, another operating system is introduced—a smaller one with substantially limited functionality focused on security. An example of such a system is BitLocker.
+
+Generally, hardware-level encryption is typically faster and more secure than software solutions. However, it may prevent the user from accessing their data if the computer is somehow damaged.
  
 
 # ROM and booting
