@@ -117,29 +117,40 @@ SSDs in home computers often use MLC technology, where each cell can hold more t
 
 ### External Drives
 
-External drives, which can be HDD or SSD, are connected via USB ports, offering increased storage capacity and portability. These drives are also commonly used for data backups. However, flash memory can lose data over years if not used.
+Personal computer users also widely employ external drives, which are made using HDD or SSD technology just like the internal drives discussed above but are placed outside the computer case and can be plugged in as needed, typically via USB ports. Their obvious advantage is an increase in total available secondary memory; another clear gain is portability.
 
+These drives can also be used as data backups for internal HDD or SSD drives, as both technologies involve a risk of data corruption or loss. However, one needs to be cautious with flash memory: although it is labeled as non-volatile, it can lose its content over time due to the discharging of its internal capacitors if not used for a few years.
 ### Other Storage Media
 
 #### USB Memory
 
-Known as USB sticks or pen drives, these devices store data in semiconductor flash memory. While portable, they are slower and more error-prone than SSDs.
+Devices known as USB sticks or pen-drives (though the latter name is officially registered by a Taiwanese company Add On Technology, so it specifically applies only to their products) store data in semiconductor flash memory, just like SSD drives. The difference is that they are designed to be external, small, and portable. As a result, they are significantly slower—the limit set by the standard is 4.6 Gb/s, though in practice this speed is rarely achieved. Additionally, they are more error-prone and more expensive per byte compared to SSD drives.
 
 #### SD Memory Cards
 
-Used mainly in cameras and mobile phones, these cards also rely on semiconductor flash memory.
+Another type of semiconductor flash memory, SD memory cards, is used mainly in photo and video cameras, as well as in mobile phones.
 
 #### Optical Memory
 
-CDs, DVDs, and Blu-ray discs store data through laser beams manipulating the transparency of materials on the disc’s surface. They can support single or multiple writes, varying in capacity from 1 GB for CDs, up to 25 GB or more for Blu-ray discs.
+Optical memory devices, such as CDs, DVDs, and Blu-ray discs, use a laser beam for reading and writing data. The data carrier is a surface—typically in the shape of a disk—covered with a material whose transparency can be easily changed, introducing two types of points: reflecting and non-reflecting, which represent bit values. Similar to HDD drives, the reading and writing processes in optical memory involve disk rotation to position the read/write head above the appropriate sector. The data-carrying materials can support either single or multiple writes, and they vary by total capacity:
+
+- For the CD standard, the typical capacity is around 1 GB.
+- For DVDs, the typical capacity is 4.7 GB; by using double-layered and/or double-sided discs, capacity can reach up to 17.1 GB, though such large DVDs are rarely used.
+- In Blu-ray technology, the typical capacity of a disc is 25 GB. More than two layers can be supported, although this is also uncommon. The increase in information density in Blu-ray technology is achieved by using a laser beam with a shorter wavelength (blue light).
 
 ### Drive Interfaces
 
+Besides the manufacturing technology, an important factor for the practical efficiency of a storage drive—and its usefulness in combination with a particular computer—is the way in which it is connected, that is, the type of bus and plug used.
+
+#### Bus types
+
 Types of buses used to connect storage drives to the processor include:
 
-- **SATA**: Mainly for HDDs, also used for many SSDs.
-- **PCIe**: Used for faster SSDs.
-- **USB**: For external drives.
+Currently, in home applications, three main types of buses are used to connect storage drives to the processor:
+
+- **SATA (Serial ATA, where ATA stands for Advanced Technology Attachment):** Practically the only choice for HDD drives; also used for many SSD models.
+- **PCIe (PCI Express, where PCI stands for Peripheral Component Interconnect):** A standard we have already encountered in the lecture "Motherboard" (due to its role in connecting the CPU to the RAM memory); also used for faster SSD models.
+- **USB (Universal Serial Bus):** Mainly used for attaching external drives.
 
 #### Communication Modes
 
