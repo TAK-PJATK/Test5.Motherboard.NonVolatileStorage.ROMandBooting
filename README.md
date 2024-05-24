@@ -225,100 +225,80 @@ Generally, hardware-level encryption is typically faster and more secure than so
 
 # ROM and booting
 
-As we know from the previous lectures, the role of RAM includes storing the code of the currently running program. However, at the time when a computer is powered on, RAM does not contain any useful data. The operating system, which also participates in memory management, isn’t yet active either. To make setting up all of this possible, the computer motherboard contains an additional memory die. Clearly, it must be non-volatile memory, i.e, one which does not lose data during power-off periods.
+As we know from previous lectures, the role of RAM includes storing the code of the currently running program. However, at the time when a computer is powered on, RAM does not contain any useful data. The operating system, which also participates in memory management, isn't yet active either. To facilitate setting up all of this, the computer motherboard contains an additional memory die. Clearly, it must be non-volatile memory, i.e., memory that does not lose data during power-off periods.
 
-That memory is usually of the flash EEPROM type. The name EEPROM can be a bit confusing, as it stands for: electrically erasable programmable read-only memory. The read-only-memory (ROM) part is here for historical reasons. Indeed, several production technologies ago, an important spot in computer design was occupied by memory in which data could be stored only once, at manufacturing time. However, later enhancements enabled that memory to be edited (“programmed”) long after its creation (leading to PROM), then to be erased with UV light and programmed again (EPROM), up to the modern solutions in which such memory can be erased and programmed again without even taking it out of the computer.
+This memory is usually of the flash **EEPROM** type. The name EEPROM can be a bit confusing, as it stands for _electrically erasable programmable read-only memory_. The _read-only-memory_ (ROM) part is here for historical reasons. Several production technologies ago, an important spot in computer design was occupied by memory in which data could be stored only once, at manufacturing time. However, later enhancements enabled that memory to be edited (“programmed”) long after its creation (leading to PROM), then to be erased with UV light and programmed again (EPROM), up to the modern solutions where such memory can be erased and programmed again without even taking it out of the computer.
 
-The main content of the built-in non-volatile memory is firmware purposed to be executed as the first code after the computer is powered on. This plays the role of a “restricted operating system”, enabling the processor to communicate with input/output devices on the motherboard (e.g, keyboard, disk, graphics card) until the true (much more complex) operating system is started and takes these tasks on.
+The main content of the built-in non-volatile memory is firmware purposed to be executed as the first code after the computer is powered on. This plays the role of a “restricted operating system,” enabling the processor to communicate with input/output devices on the motherboard (e.g., keyboard, disk, graphics card) until the true (much more complex) operating system starts up and takes over these tasks.
 
-For a long time, that initial firmware was usually based on a program for the IBM PC computer called BIOS — and, despite later extensions and adjustments, used to be still generally described as BIOS (Basic Input/Output System). In fact, that name can be still found in use, e.g, the abovementioned ROM memory is still sometimes called the BIOS die. However, in the last years, due to technical limitations typical to BIOS, its role has been taken over by a new firmware standard called UEFI (Unified Extensible Firmware Interface), developed and promoted in cooperation between multiple leading companies (including Intel, AMD, Lenovo, Dell, HP, Microsoft, and Apple),
+For a long time, that initial firmware was usually based on a program for the IBM PC computer called BIOS. Despite later extensions and adjustments, it continued to be generally described as **BIOS** (_Basic Input/Output System_). In fact, that name is still sometimes used; for example, the aforementioned ROM memory is still occasionally called the _BIOS die_. However, in recent years, due to technical limitations typical of BIOS, its role has been taken over by a new firmware standard called **UEFI** (_Unified Extensible Firmware Interface_). This standard was developed and promoted in cooperation with multiple leading companies, including Intel, AMD, Lenovo, Dell, HP, Microsoft, and Apple.
 
-Before going into the differences between BIOS and UEFI, we will describe the basic principles of the startup procedure of a computer and its operating system, which look similarly in both standards.
+Before diving into the differences between BIOS and UEFI, let's describe the basic principles of the startup procedure of a computer and its operating system, which look similar under both standards.
 
 ## Booting
 
-One of the main tasks of BIOS/UEFI is executing a boot loader, responsible for loading the operating system code into RAM, and then executing that code. In modern computers, this procedure often consists of multiple stages:
+One of the main tasks of BIOS/UEFI is executing a boot loader, responsible for loading the operating system code into RAM and then executing that code. In modern computers, this procedure often consists of multiple stages:
 
-* A first-stage boot loader (BIOS/UEFI), instead of loading the operating system, loads another second-stage boot loader, which can be e.g,:
+- **First-Stage Boot Loader (BIOS/UEFI):** Instead of directly loading the operating system, it loads another, second-stage boot loader. Examples include:
+  - **Boot loader for MS Windows (bootmgr):** Offers the user a choice between Windows versions (if more than one is installed) and provides an option to run Windows in safe mode (a restricted, and hence more stable, version of the system).
+  - **The GRUB boot loader:** Offers the user a choice between various UNIX-like operating systems (including Linux) and MS Windows, provided more than one such system is installed.
 
-—    a boot loader for MS Windows (bootmgr), offering the user a choice between Windows versions (if there is more than one installed), as well as an option to run Windows in so-called safe mode (a restricted, and hence more stable, version of the system);
+- **Proper Operating System Invocation:** Only then is the proper operating system invoked.
 
-—    the GRUB boot loader, offering the user a choice between various UNIX-like operating systems (including Linux) and MS Windows — of course, if there is more than one such system installed.
-
-Only then, the proper operating system is invoked.
-
-The second-stage boot loader is initially placed in the secondary memory, in a well-specified location of the particular storage device (e.g. for a hard drive, it is its first sector). (A part of a first-stage boot loader’s work is to cheek all the computer storage drives for one that has such a boot sector). 
-
-One can also boot from a pendrive, a CD/DVD disc, or even from another computer in the local network. (Earlier in the past, there were also other technologies in use, like floppy discs, or even punched tapes or cards). 
-
-Notably, during an installation procedure for an operating system, the second-stage boot loader role is taken by the installer.
+The second-stage boot loader is initially placed in secondary memory, in a well-specified location of the particular storage device (e.g., for a hard drive, it is its first sector). A part of the first-stage boot loader's work is to check all the computer storage drives for one that contains such a boot sector. One can also boot from a pen drive, a CD/DVD disc, or even from another computer in the local network. Earlier in the past, other technologies such as floppy disks, punched tapes, or cards were also used. Notably, during an operating system installation procedure, the second-stage boot loader role is taken by the installer.
 
 ## The POST self-cheek
 
-Before BIOS/UEFI can proceed to the boot loader, it executes the POST procedure, which is the basic cheek of the crucial computer components. In particular, the cheeks involve the processor and main memory. In ease any erorrs have been found, the appropriate message will be displayed on the screen — however, in ease this could be impossible (e.g, due to a screen failure), the problems are additionally communicated with sound beeps. The exact meaning of these signals depends on the BIOS/UEFI manufacturer. Below, we list the meanings of sound signals according to one of the popular conventions, AMI BIOS:
+Before BIOS/UEFI can proceed to the boot loader, it executes the Power-On Self Test (POST) procedure, which is a basic check of crucial computer components. In particular, the checks involve the processor and main memory. If any errors are found, an appropriate message will be displayed on the screen. However, in cases where displaying the message could be impossible (e.g., due to a screen failure), the problems are additionally communicated with sound beeps. The exact meaning of these signals depends on the BIOS/UEFI manufacturer. Below, we list the meanings of sound signals according to one of the popular conventions, AMI BIOS:
 
-|     |     |     |
-| --- | --- | --- |
-| Signal | Error type | Comment |
-| 1 long | no error | the POST test has finished with success |
-| 1 short | DRAM refresh error | e.g. an error while handling an interrupt |
-| 2 short | memory parity error | unexpected value of the checksum bit |
-| 3 short | RAM error | within the initial 64kiB |
-| 4 short | system clock error |     |
-| 5 short | CPU error |     |
-| 6 short | A20 gate error | the A20 gate controls CPU access to memory addresses above 16MiB; an error in it prevents CPU from switching between modes of operation |
-| 7 short | CPU virtual mode error |     |
-| 8 short | video memory error |     |
-| 9 short | ROM checksum error | ROM content has been corrupted |
-| 10 short | CMOS memory error | CMOS is a small memory for BIOS settings (which is non-volatile thanks to permanent power supply from the CMOS battery) |
-| 11 short | L2 cache error |     |
-| 1    long,<br><br>2    short | video subsystem error |     |
-| 1 long, 3 short | RAM error | outside the initial 64kiB |
-| 1 long, 8 short | display error |     |
-|alternating  high/low | insufficient power | insufficient CPU voltage or fan rotation speed
+| Signal              | Error Type                | Comment                                                                                      |
+|---------------------|---------------------------|----------------------------------------------------------------------------------------------|
+| 1 long              | No error                  | The POST test has finished successfully                                                      |
+| 1 short             | DRAM refresh error        | E.g., an error while handling an interrupt                                                   |
+| 2 short             | Memory parity error       | Unexpected value of the checksum bit                                                         |
+| 3 short             | RAM error                 | Within the initial 64 KiB                                                                     |
+| 4 short             | System clock error        |                                                                                              |
+| 5 short             | CPU error                 |                                                                                              |
+| 6 short             | A20 gate error            | The A20 gate controls CPU access to memory addresses above 16 MiB; an error here prevents CPU from switching between modes of operation |
+| 7 short             | CPU virtual mode error    |                                                                                              |
+| 8 short             | Video memory error        |                                                                                              |
+| 9 short             | ROM checksum error        | ROM content has been corrupted                                                               |
+| 10 short            | CMOS memory error         | CMOS is a small memory for BIOS settings (non-volatile thanks to a permanent power supply from the CMOS battery) |
+| 11 short            | L2 cache error            |                                                                                              |
+| 1 long, 2 short     | Video subsystem error     |                                                                                              |
+| 1 long, 3 short     | RAM error                 | Outside the initial 64 KiB                                                                   |
+| 1 long, 8 short     | Display error             |                                                                                              |
+| 2 alternating high/low | Insufficient power     | Insufficient CPU voltage or fan rotation speed                                               |
 
-Occasionally, it’s worth to check certain components even more thoroughly, which can be achieved with special diagnostic programs. Memory or hard drive can be tested from the operating system level; however, some tools (often these more thorough, e.g. memtest86 for RAM) need to be launched from the BIOS/UEFI level.
+Occasionally, it is beneficial to check certain components more thoroughly, which can be achieved with special diagnostic programs. Memory or hard drive can be tested from the operating system level; however, some tools (often more thorough ones, like memtest86 for RAM) need to be launched from the BIOS/UEFI level.
 
 ## Settings
 
-After POST finishes, the user can enter the settings mode. To land there, one needs to press a proper key — usually Esc or one of the function keys (F8, F12 etc,). The proper key depends on the BIOS/UEFI version; an information regarding which one is proper is displayed for some time on the startup screen.
+After POST finishes, the user can enter the settings mode. To access this mode, one needs to press the appropriate key—usually Esc or one of the function keys (F8, F12, etc.). The specific key depends on the BIOS/UEFI version; information regarding the correct key is displayed briefly on the startup screen.
 
-In the settings mode, the user can adjust e.g, the clock frequency for the CPU, RAM, or system buses, the voltage powering the motherboard slots, or the computer fan rotation speed. Changing these parameters may improve computer efficiency — however, one should keep in mind that this brings a risk of unstable operation, or even damaging the hardware. Fortunately, at least as long as no component has been damaged, the settings mode allows restoring the factory defaults.
+In settings mode, the user can adjust parameters such as the clock frequency for the CPU, RAM, or system buses, the voltage powering the motherboard slots, and the computer fan rotation speed. Changing these parameters may improve computer efficiency; however, one should keep in mind that this brings a risk of unstable operation or even hardware damage. Fortunately, as long as no component has been damaged, the settings mode allows restoring the factory defaults.
 
-In that mode, the user can also set the order in which storage drives are checked for the boot loader. This is practically necessary if the top priority is currently assigned to the hard drive, while we want to boot from a pendrive (theoretically, an alternative is to take the hard drive out of the computer, though in practice it’s clearly easier to change the settings). On the other hand, putting the hard drive on top of that list can save a few seconds of waiting during every normal computer startup. Similarly, some time can be saved by switching unnecessary devices — for example, when there is a non-connected slot on the motherboard. Another benefit from such settings change can be increasing security (e.g, by switching off all USB data transmission).
+In this mode, the user can also set the order in which storage drives are checked for the boot loader. This is practically necessary if the top priority is currently assigned to the hard drive and the user wants to boot from a pen drive. (Theoretically, an alternative is to take the hard drive out of the computer, though in practice it's easier to change the settings.) Conversely, putting the hard drive at the top of the list can save a few seconds of waiting during every normal computer startup. Similarly, some time can be saved by disabling unnecessary devices, such as non-connected slots on the motherboard. Another benefit of such settings changes is increasing security, for example, by disabling all USB data transmission.
 
 ### I/O interface
 
-The last functionality of BIOS/UEFI to be mentioned here is defiinig interrupt handlers - that is, defining a way for the CPU to communicate with the input/output devices. 
+The last functionality of BIOS/UEFI to be mentioned here is defining interrupt handlers, which is the way for the CPU to communicate with input/output devices. Until the 1990s, BIOS served as an intermediate layer between the operating system and I/O devices (which is reflected in its name). Currently, managing I/O devices is done inside the operating system. Thanks to this, the user can attach a new device and, if needed, install its software driver without upgrading their BIOS/UEFI.
 
-Until the 1990's, BIOS served as an intermediate layer between the operating system and I/O devices (which is reflected in its name). Currently, managing I/O devices is done inside the operating system; thanks to this, the user can attach a new device (and, if needed, install its software driver) without upgrading their BIOS/UEFI.
-
-However, I/O management in BIOS/UEFI is still retained - e.g. to ensure backward compatibility (so that older programs can still execute), though most importantly to enable the abovementioned booting procedure during which BIOS/UEFI must load data from secondary storage without any help from the operating system (which is not yet running at that time).
+However, I/O management in BIOS/UEFI is still retained. This is done, for instance, to ensure backward compatibility so that older programs can still execute. More importantly, it enables the booting procedure during which BIOS/UEFI must load data from secondary storage without any help from the operating system, which is not yet running at that time.
 
 ### BIOS vs. UEFI
 
-From the user's viewpoint, the most noticeable di?erence between the newer UEFI and the older BIOS is appearance: while BIOS displays everything in ASCII mode, with no mouse support, UEFI offers a graphical interface (and, generally, more convenient usage). 
+From the user's viewpoint, the most noticeable difference between the newer UEFI and the older BIOS is in the appearance: while BIOS displays everything in ASCII mode with no mouse support, UEFI offers a graphical interface and generally more convenient usage. UEFI also removes some problems and limitations present in BIOS regarding handling hard drives (e.g., the total size limited to 2 TiB, the number of _primary partitions_ limited to 4). However, the impact extends to other computer components as well.
 
-UEFI also removes some problems and limitations present in BIOS regarding handling hard drives (e.g. total size limited to 2 TiB, the number of so-called _primary partitions_ limited to 4). However, the impact extends to other computer components. Also, some settings (e.g. Secure Boot) can on one hand improve security by making malware attacks significantly harder, but on the other hand may complicate or even prevent installing some operating systems.
-
-UEFI also offers an operating mode compatible with the BIOS standard (_Compatibility Support Mode_ - CSM; earlier also _Legacy BIOS_). Enabling it is necessary in case of some older components incompatible with the UEFI standard. On the other hand, some modules (e.g. Intel chipsets) do not offer compatibility with the BIOS standard. Similarly, the MS Windows operating system starting from version 11 - requires the Secure Boot setting to support some of its functionalities, and that is only available in the UEFI mode, not in the BIOS compatibility modes.
+For instance, some settings, such as Secure Boot, can improve security by making malware attacks significantly harder but may also complicate or even prevent the installation of certain operating systems. UEFI also offers an operating mode compatible with the BIOS standard, known as _Compatibility Support Mode_ (CSM) or earlier as _Legacy_ BIOS. Enabling this mode is necessary in the case of some older components incompatible with the UEFI standard. Conversely, some modules, like certain Intel chipsets, do not offer compatibility with the BIOS standard. Similarly, the MS Windows operating system—starting from version 11—requires the Secure Boot setting to support some of its functionalities, which is only available in UEFI mode, not in the BIOS compatibility modes.
 
 ### Upgrades
 
-As previously mentioned, upgrading the BIOS/UEFI on a specific computer may be necessary—for example, after replacing a hardware component. There are several ways to save a new version, listed below from the most high-level to the most low-level approaches:
+As already mentioned, BIOS/UEFI on a particular computer can be upgraded, which may be necessary, for example, after replacing a hardware component. Saving a new version can be done in various ways (listed below starting from the most high-level ones):
 
-1. From the level of an already running operating system (provided that the OS supports this);
+1. **From the level of an already running operating system** (provided that the OS supports this).
+2. **From a special file placed on a pen drive, during booting, using the UEFI user interface**.
+3. **From a special file placed on a pen drive, by pressing an appropriate button on the computer case** (provided that the motherboard and the computer case both support this).
+4. **Directly to the EEPROM die** (after opening the computer case), by using a dedicated device.
 
-2. From a special file placed on a pendrive, during booting, using the UEFI user interface;
-
-3. From a special file placed on a pendrive, by pressing an appropriate button on the computer case (provided that the motherboard and the computer case both support this);
-
-4. Directly to the EEPROM die (after opening the computer case), by using a dedicated device.
-
-The more high-level ways are generally safer (e.g. the operating system and UEFI make an initial check of the update file, so that we do not risk e.g. using a "neighbouring" file of a wrong format by a plain mistake). 
-
-Still, such an update is potentially dangerous - it could make some I/O device inaccessible. 
-
-If we're unlucky enough to pick a UEFI version incompatible with our motherboard, we may even lose way to turn the computer on; in such case, the only remaining ways to fix this are methods 3 and 4. 
-
-The takeaway is that upgrading BIOS/UEFI without a direct reason is not recommended.
+The more high-level methods are generally safer because the operating system and UEFI make an initial check of the update file, reducing the risk of using an incorrect file format by mistake. However, such updates are potentially dangerous—they could make some I/O devices inaccessible. If we are unlucky enough to pick a UEFI version incompatible with our motherboard, we may even lose the ability to turn the computer on; in such cases, the only remaining ways to fix this are methods 3 and 4. The takeaway is that upgrading BIOS/UEFI without a direct reason is not recommended.
